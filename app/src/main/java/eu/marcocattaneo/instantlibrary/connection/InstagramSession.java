@@ -1,11 +1,11 @@
 package eu.marcocattaneo.instantlibrary.connection;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.webkit.WebView;
 
 import org.json.JSONObject;
 
@@ -18,15 +18,16 @@ import eu.marcocattaneo.instantlibrary.connection.client.implementation.HttpCall
 import eu.marcocattaneo.instantlibrary.connection.implementation.InstagramListener;
 import eu.marcocattaneo.instantlibrary.connection.implementation.RequestCallback;
 import eu.marcocattaneo.instantlibrary.connection.models.ConnectionError;
+import eu.marcocattaneo.instantlibrary.connection.utils.AuthenticationDialog;
 import eu.marcocattaneo.instantlibrary.connection.utils.HttpUtils;
 
 public class InstagramSession {
 
+    public enum STATUS {
+        NOT_READY, AUTHORIZATION, CONNECTED, ERROR, REQUIRING_TOKEN
+    }
+
     private static final String PREF_SHARED_TOKEN = "InstantLibrary:saved_token";
-
-    private static final String PREF_SHARED_CLIENT_ID = "InstantLibrary:client_id";
-
-    private static final String PREF_SHARED_CLIENT_SECRET = "InstantLibrary:client_secret";
 
     private static final String ENDPOINT_URL = "https://api.instagram.com";
 
@@ -34,11 +35,17 @@ public class InstagramSession {
 
     private static final String OAUTH_URL = ENDPOINT_URL + "/oauth/access_token";
 
-    private InstantLibrary.STATUS mCurrentStatus = InstantLibrary.STATUS.NOT_READY;
+    private SharedPreferences mSharedPreferences;
+
+    private String clientId;
+
+    private String clientSecret;
+
+    private String clientCallback;
+
+    private STATUS mCurrentStatus = STATUS.NOT_READY;
 
     private InstagramListener mListener;
-
-    private SharedPreferences mSharedPreferences;
 
     private Activity mActivity;
 
@@ -49,45 +56,23 @@ public class InstagramSession {
         initPreferences();
     }
 
-    /**
-     * Inizialize shared preferences
-     */
-    private void initPreferences() {
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
-    }
-
-    /**
-     * Set and save token in shared preferences
-     * @param token token to save
-     */
-    private void saveToken(String token) {
-        mSharedPreferences.edit().putString(PREF_SHARED_TOKEN, token).apply();
-    }
-
-    /**
-     * Return saved token
-     * @return String token
-     */
-    private String getToken() {
-        return mSharedPreferences.getString(PREF_SHARED_TOKEN, null);
-    }
-
-    /**
-     * Initialize library
-     * @param client_id
-     * @param client_secret
-     * @param instagramListener
-     */
-    public void init(@NonNull String client_id, @NonNull String client_secret, @NonNull InstagramListener instagramListener) {
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(PREF_SHARED_CLIENT_ID, client_id);
-        editor.putString(PREF_SHARED_CLIENT_SECRET, client_secret);
-        editor.apply();
+    public void loadSession(Instagram instagram, InstagramListener instagramListener) {
 
         this.mListener = instagramListener;
         this.mHttpClient = new HttpClient(mActivity);
 
+        this.clientCallback = instagram.getClientCallback();
+        this.clientId = instagram.getClientIdd();
+        this.clientSecret = instagram.getClientSecret();
+
         connect();
+    }
+
+    /**
+     * Initialize share preferences
+     */
+    private void initPreferences() {
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
     }
 
     /**
@@ -101,27 +86,32 @@ public class InstagramSession {
             return;
         }
 
-        mCurrentStatus = InstantLibrary.STATUS.AUTHORIZATION;
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(AUTHORIZATION_URL + "?client_id=" +  mSharedPreferences.getString(PREF_SHARED_CLIENT_ID, "") + "&redirect_uri=" + InstantLibrary.OAUTH_CALLBACK + "&response_type=code"));
-        mActivity.startActivity(i);
+        AuthenticationDialog authenticationDialog = AuthenticationDialog.newInstnace(mActivity, AUTHORIZATION_URL + "?client_id=" +  clientId + "&redirect_uri=" + clientCallback + "&response_type=code",
+                clientCallback);
+        authenticationDialog.addOnHttpCallback(new AuthenticationDialog.OnHttpCallback() {
+            @Override
+            public void onIntercept(WebView webView, String url) {
+                onAuth(url);
+            }
+        });
+        authenticationDialog.show();
     }
 
     /**
      * Make a oauth connection with authentication callback
-     * @param intent
+     * @param url
      */
-    public void onAuth(Intent intent) {
+    private void onAuth(String url) {
 
-        Uri uri = intent.getData();
+        Uri uri = Uri.parse(url);
         String code = uri != null ? uri.getQueryParameter("code") : null;
 
         if (code != null && !code.isEmpty()) {
 
             requireToken(code);
-            mCurrentStatus = InstantLibrary.STATUS.REQUIRING_TOKEN;
+            mCurrentStatus = STATUS.REQUIRING_TOKEN;
         } else {
-            mCurrentStatus = InstantLibrary.STATUS.ERROR;
+            mCurrentStatus = STATUS.ERROR;
 
             mListener.onError(new ConnectionError(uri != null ? uri.getQueryParameter("error") : "Unknown error"));
         }
@@ -135,10 +125,10 @@ public class InstagramSession {
     private void requireToken(String code) {
 
         Map<String, String> params = new HashMap<>();
-        params.put("client_id", mSharedPreferences.getString(PREF_SHARED_CLIENT_ID, ""));
-        params.put("client_secret", mSharedPreferences.getString(PREF_SHARED_CLIENT_SECRET, ""));
+        params.put("client_id", clientId);
+        params.put("client_secret", clientSecret);
         params.put("grant_type", "authorization_code");
-        params.put("redirect_uri", InstantLibrary.OAUTH_CALLBACK);
+        params.put("redirect_uri", clientCallback);
         params.put("code", code);
 
         this.mHttpClient.Build(OAUTH_URL, HttpMethod.POST, HttpUtils.getEncodedParams(params)).execute(new HttpCallback() {
@@ -149,7 +139,7 @@ public class InstagramSession {
                         JSONObject res = new JSONObject(body);
                         saveToken(res.getString("access_token"));
 
-                        mCurrentStatus = InstantLibrary.STATUS.CONNECTED;
+                        mCurrentStatus = STATUS.CONNECTED;
                         mListener.onConnect(InstagramSession.this);
                         return;
                     } catch (Exception e) {
@@ -157,7 +147,7 @@ public class InstagramSession {
                     }
                 }
 
-                mCurrentStatus = InstantLibrary.STATUS.ERROR;
+                mCurrentStatus = STATUS.ERROR;
                 mListener.onError(new ConnectionError("Token error"));
 
             }
@@ -171,10 +161,26 @@ public class InstagramSession {
     }
 
     /**
+     * Setun current token
+     * @return
+     */
+    private String getToken() {
+        return mSharedPreferences.getString(PREF_SHARED_TOKEN, null);
+    }
+
+    /**
+     * Save token
+     * @param access_token
+     */
+    private void saveToken(String access_token) {
+        mSharedPreferences.edit().putString(PREF_SHARED_TOKEN, access_token).apply();
+    }
+
+    /**
      * Return current session status
      * @return
      */
-    public InstantLibrary.STATUS getStatus() {
+    public STATUS getStatus() {
         return mCurrentStatus;
     }
 
