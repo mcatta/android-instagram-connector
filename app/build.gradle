@@ -1,10 +1,9 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
     buildToolsVersion "24.0.2"
     defaultConfig {
-        applicationId "eu.marcocattaneo.instantlibrary"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1

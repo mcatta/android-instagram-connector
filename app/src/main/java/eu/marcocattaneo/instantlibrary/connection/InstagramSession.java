@@ -62,7 +62,7 @@ public class InstagramSession {
         this.mHttpClient = new HttpClient(mActivity);
 
         this.clientCallback = instagram.getClientCallback();
-        this.clientId = instagram.getClientIdd();
+        this.clientId = instagram.getClientId();
         this.clientSecret = instagram.getClientSecret();
 
         connect();
@@ -134,6 +134,7 @@ public class InstagramSession {
         this.mHttpClient.Build(OAUTH_URL, HttpMethod.POST, HttpUtils.getEncodedParams(params)).execute(new HttpCallback() {
             @Override
             public void onResponse(String body, int resultCode) {
+                //TODO manage errors
                 if (resultCode == 200) {
                     try {
                         JSONObject res = new JSONObject(body);
@@ -186,13 +187,26 @@ public class InstagramSession {
 
 
     /**
-     * Execute a instagram request
+     * Execute an instagram request (standard GET)
      * @param url
      * @param callback
      */
     public void execute(@NonNull String url, final RequestCallback callback) {
 
-        this.mHttpClient.Build(ENDPOINT_URL + "/v1" + url + "?access_token=" + getToken(), HttpMethod.GET).execute(new HttpCallback() {
+        execute(url, HttpMethod.GET, null, callback);
+
+    }
+
+    /**
+     * Execute an instagram request with parameters
+     * @param url
+     * @param method
+     * @param body
+     * @param callback
+     */
+    public void execute(@NonNull String url, HttpMethod method, String body, final RequestCallback callback) {
+
+        this.mHttpClient.Build(ENDPOINT_URL + "/v1" + url + "?access_token=" + getToken(), method, body).execute(new HttpCallback() {
             @Override
             public void onResponse(String body, int resultCode) {
                 callback.onResponse(resultCode, body);
