@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instantlibrary.connection.implementation;
+package eu.marcocattaneo.instagramLibrary.connection.implementation;
 
 import android.support.annotation.Nullable;
 

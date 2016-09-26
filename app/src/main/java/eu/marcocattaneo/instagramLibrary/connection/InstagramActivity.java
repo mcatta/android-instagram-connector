@@ -1,13 +1,13 @@
-package eu.marcocattaneo.instantlibrary.connection;
+package eu.marcocattaneo.instagramLibrary.connection;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-import eu.marcocattaneo.instantlibrary.connection.implementation.InstagramListener;
-import eu.marcocattaneo.instantlibrary.connection.implementation.RequestCallback;
-import eu.marcocattaneo.instantlibrary.connection.models.ConnectionError;
+import eu.marcocattaneo.instagramLibrary.connection.implementation.InstagramListener;
+import eu.marcocattaneo.instagramLibrary.connection.implementation.RequestCallback;
+import eu.marcocattaneo.instagramLibrary.connection.models.ConnectionError;
 
 public class InstagramActivity extends Activity implements InstagramListener {
 

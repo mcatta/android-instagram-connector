@@ -1,4 +1,4 @@
-<manifest package="eu.marcocattaneo.instantlibrary"
+<manifest package="eu.marcocattaneo.instagramLibrary"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".connection.InstagramActivity">
+        <activity android:name="eu.marcocattaneo.instagramLibrary.connection.InstagramActivity">
 
             <intent-filter>
 

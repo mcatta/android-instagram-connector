@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instantlibrary;
+package eu.marcocattaneo.instagramLibrary;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instantlibrary.connection.client;
+package eu.marcocattaneo.instagramLibrary.connection.client;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,8 +11,8 @@ import com.android.volley.toolbox.Volley;
 
 import java.io.UnsupportedEncodingException;
 
-import eu.marcocattaneo.instantlibrary.connection.client.implementation.HttpCallback;
-import eu.marcocattaneo.instantlibrary.connection.client.models.HttpResponse;
+import eu.marcocattaneo.instagramLibrary.connection.client.implementation.HttpCallback;
+import eu.marcocattaneo.instagramLibrary.connection.client.models.HttpResponse;
 
 public class HttpClient {
 

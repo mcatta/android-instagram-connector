@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instantlibrary;
+package eu.marcocattaneo.instagramLibrary;
 
 import org.junit.Test;
 

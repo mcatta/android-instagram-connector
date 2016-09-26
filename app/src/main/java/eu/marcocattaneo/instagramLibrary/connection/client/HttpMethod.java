@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instantlibrary.connection.client;
+package eu.marcocattaneo.instagramLibrary.connection.client;
 
 public enum HttpMethod {
 

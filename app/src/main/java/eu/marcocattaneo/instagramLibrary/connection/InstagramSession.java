@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instantlibrary.connection;
+package eu.marcocattaneo.instagramLibrary.connection;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -12,14 +12,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import eu.marcocattaneo.instantlibrary.connection.client.HttpClient;
-import eu.marcocattaneo.instantlibrary.connection.client.HttpMethod;
-import eu.marcocattaneo.instantlibrary.connection.client.implementation.HttpCallback;
-import eu.marcocattaneo.instantlibrary.connection.implementation.InstagramListener;
-import eu.marcocattaneo.instantlibrary.connection.implementation.RequestCallback;
-import eu.marcocattaneo.instantlibrary.connection.models.ConnectionError;
-import eu.marcocattaneo.instantlibrary.connection.utils.AuthenticationDialog;
-import eu.marcocattaneo.instantlibrary.connection.utils.HttpUtils;
+import eu.marcocattaneo.instagramLibrary.connection.client.HttpClient;
+import eu.marcocattaneo.instagramLibrary.connection.client.HttpMethod;
+import eu.marcocattaneo.instagramLibrary.connection.client.implementation.HttpCallback;
+import eu.marcocattaneo.instagramLibrary.connection.implementation.InstagramListener;
+import eu.marcocattaneo.instagramLibrary.connection.implementation.RequestCallback;
+import eu.marcocattaneo.instagramLibrary.connection.models.ConnectionError;
+import eu.marcocattaneo.instagramLibrary.connection.utils.AuthenticationDialog;
+import eu.marcocattaneo.instagramLibrary.connection.utils.HttpUtils;
 
 public class InstagramSession {
 

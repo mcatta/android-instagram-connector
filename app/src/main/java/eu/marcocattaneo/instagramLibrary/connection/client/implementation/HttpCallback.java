@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instantlibrary.connection.client.implementation;
+package eu.marcocattaneo.instagramLibrary.connection.client.implementation;
 
 public interface HttpCallback {
 

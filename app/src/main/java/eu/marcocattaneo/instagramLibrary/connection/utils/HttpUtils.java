@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instantlibrary.connection.utils;
+package eu.marcocattaneo.instagramLibrary.connection.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

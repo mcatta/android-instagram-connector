@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instantlibrary.connection.client.models;
+package eu.marcocattaneo.instagramLibrary.connection.client.models;
 
 import java.io.UnsupportedEncodingException;
 
