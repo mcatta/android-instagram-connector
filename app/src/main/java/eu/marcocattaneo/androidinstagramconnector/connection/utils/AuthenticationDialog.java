@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instagramLibrary.connection.utils;
+package eu.marcocattaneo.androidinstagramconnector.connection.utils;
 
 import android.app.Activity;
 import android.app.Dialog;

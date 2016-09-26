@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instagramLibrary.connection.utils;
+package eu.marcocattaneo.androidinstagramconnector.connection.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

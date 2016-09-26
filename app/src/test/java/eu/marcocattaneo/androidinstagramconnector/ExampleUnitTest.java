@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instagramLibrary;
+package eu.marcocattaneo.androidinstagramconnector;
 
 import org.junit.Test;
 

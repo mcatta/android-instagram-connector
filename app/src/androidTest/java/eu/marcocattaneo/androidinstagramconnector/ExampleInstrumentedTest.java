@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instagramLibrary;
+package eu.marcocattaneo.androidinstagramconnector;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

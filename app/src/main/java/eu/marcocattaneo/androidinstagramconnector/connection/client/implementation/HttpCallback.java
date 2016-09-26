@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instagramLibrary.connection.client.implementation;
+package eu.marcocattaneo.androidinstagramconnector.connection.client.implementation;
 
 public interface HttpCallback {
 

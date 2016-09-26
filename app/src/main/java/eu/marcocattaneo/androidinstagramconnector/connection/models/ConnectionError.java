@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instagramLibrary.connection.models;
+package eu.marcocattaneo.androidinstagramconnector.connection.models;
 
 public class ConnectionError extends Exception {
 

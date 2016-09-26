@@ -1,10 +1,10 @@
-package eu.marcocattaneo.instagramLibrary.connection;
+package eu.marcocattaneo.androidinstagramconnector.connection;
 
 import android.app.Activity;
 
 import android.support.annotation.NonNull;
 
-import eu.marcocattaneo.instagramLibrary.connection.implementation.InstagramListener;
+import eu.marcocattaneo.androidinstagramconnector.connection.implementation.InstagramListener;
 
 public class Instagram {
 

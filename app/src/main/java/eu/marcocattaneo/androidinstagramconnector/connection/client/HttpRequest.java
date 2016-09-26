@@ -1,4 +1,4 @@
-package eu.marcocattaneo.instagramLibrary.connection.client;
+package eu.marcocattaneo.androidinstagramconnector.connection.client;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -9,7 +9,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import java.util.HashMap;
 import java.util.Map;
 
-import eu.marcocattaneo.instagramLibrary.connection.client.models.HttpResponse;
+import eu.marcocattaneo.androidinstagramconnector.connection.client.models.HttpResponse;
 
 public class HttpRequest extends Request<HttpResponse> {
 
