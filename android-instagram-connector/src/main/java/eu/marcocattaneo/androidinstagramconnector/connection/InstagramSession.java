@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import eu.marcocattaneo.androidinstagramconnector.connection.client.HttpClient;
 import eu.marcocattaneo.androidinstagramconnector.connection.client.HttpMethod;
@@ -18,13 +19,14 @@ import eu.marcocattaneo.androidinstagramconnector.connection.client.implementati
 import eu.marcocattaneo.androidinstagramconnector.connection.implementation.InstagramListener;
 import eu.marcocattaneo.androidinstagramconnector.connection.implementation.RequestCallback;
 import eu.marcocattaneo.androidinstagramconnector.connection.models.ConnectionError;
+import eu.marcocattaneo.androidinstagramconnector.connection.models.Scope;
 import eu.marcocattaneo.androidinstagramconnector.connection.utils.AuthenticationDialog;
 import eu.marcocattaneo.androidinstagramconnector.connection.utils.HttpUtils;
 
 public class InstagramSession {
 
     public enum STATUS {
-        NOT_READY, AUTHORIZATION, CONNECTED, ERROR, REQUIRING_TOKEN
+        NOT_READY, REQUIRING_AUTHORIZATION, CONNECTED, ERROR, REQUIRING_TOKEN
     }
 
     private static final String PREF_SHARED_TOKEN = "InstantLibrary:saved_token";
@@ -51,8 +53,13 @@ public class InstagramSession {
 
     private HttpClient mHttpClient;
 
-    public InstagramSession(@NonNull Activity activity) {
+    private Set<Scope> mScopes;
+
+    public InstagramSession(@NonNull Activity activity, Set<Scope> scopes) {
         this.mActivity = activity;
+
+        this.mScopes = scopes;
+
         initPreferences();
     }
 
@@ -82,11 +89,25 @@ public class InstagramSession {
 
         // Verify token
         if (getToken() != null) {
+            mCurrentStatus = STATUS.CONNECTED;
             mListener.onConnect(this);
             return;
         }
 
-        AuthenticationDialog authenticationDialog = AuthenticationDialog.newInstnace(mActivity, AUTHORIZATION_URL + "?client_id=" +  clientId + "&redirect_uri=" + clientCallback + "&response_type=code",
+        // Scope
+        String stringScope = "";
+        if (mScopes != null && mScopes.size() > 0) {
+            stringScope = "&scope=";
+            for (Scope scope : mScopes) {
+
+                stringScope += scope.getScopeValue() + "+";
+            }
+            stringScope = stringScope.substring(0, stringScope.length()-1);
+        }
+
+        mCurrentStatus = STATUS.REQUIRING_AUTHORIZATION;
+
+        AuthenticationDialog authenticationDialog = AuthenticationDialog.newInstnace(mActivity, AUTHORIZATION_URL + "?client_id=" +  clientId + "&redirect_uri=" + clientCallback + "&response_type=code" + stringScope,
                 clientCallback);
         authenticationDialog.addOnHttpCallback(new AuthenticationDialog.OnHttpCallback() {
             @Override
@@ -206,7 +227,10 @@ public class InstagramSession {
      */
     public void execute(@NonNull String url, HttpMethod method, String body, final RequestCallback callback) {
 
-        this.mHttpClient.Build(ENDPOINT_URL + "/v1" + url + "?access_token=" + getToken(), method, body).execute(new HttpCallback() {
+        String token = url.contains("?") ? "&access_token=" : "?access_token=";
+        token += getToken();
+
+        this.mHttpClient.Build(ENDPOINT_URL + "/v1" + url + token, method, body).execute(new HttpCallback() {
             @Override
             public void onResponse(String body, int resultCode) {
                 callback.onResponse(resultCode, body);
