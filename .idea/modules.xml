@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/InstantLibrary.iml" filepath="$PROJECT_DIR$/InstantLibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android-instagram-connector/android-instagram-connector.iml" filepath="$PROJECT_DIR$/android-instagram-connector/android-instagram-connector.iml" />
-    </modules>
-  </component>
-</project>
