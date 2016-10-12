@@ -1,8 +1,14 @@
 # Android Instagram Connector
 Android Instagram Connector: use Instagram API
 
-## USE
-Easy to use, only two steps.
+## How Use
+Edit your build.gradle file with:
+
+```
+dependencies {
+    compile 'eu.marcocattaneo.androidinstagramconnector:android-instagram-connector:1.1'
+}
+```
 
 ### Example:
 
