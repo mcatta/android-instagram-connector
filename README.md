@@ -42,7 +42,20 @@ instagram.addScopes(new HashSet<Scope>() {{
 }});
 
 instagram.getSession(new InstagramListener() {
-    //... implementation
+    @Override
+    public void onConnect(InstagramSession session) {
+        session.execute("/users/self", new RequestCallback() {
+            @Override
+            public void onResponse(int resultCode, @Nullable String body) {
+                // body = json response
+            }
+        });
+    }
+
+    @Override
+    public void onError(ConnectionError error) {
+
+    }
 });
 ```
 ## LICENSE
