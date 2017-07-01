@@ -186,7 +186,7 @@ public class InstagramSession {
      * Setun current token
      * @return
      */
-    private String getToken() {
+    public String getToken() {
         return mSharedPreferences.getString(PREF_SHARED_TOKEN, null);
     }
 
