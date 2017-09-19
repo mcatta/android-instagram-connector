@@ -6,7 +6,7 @@ Edit your build.gradle file with:
 
 ```
 dependencies {
-    compile 'eu.marcocattaneo.androidinstagramconnector:android-instagram-connector:1.1'
+    compile 'eu.marcocattaneo.androidinstagramconnector:android-instagram-connector:1.2'
 }
 ```
 
