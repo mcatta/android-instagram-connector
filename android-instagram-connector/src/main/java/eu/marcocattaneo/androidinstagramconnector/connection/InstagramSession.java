@@ -1,6 +1,7 @@
 package eu.marcocattaneo.androidinstagramconnector.connection;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -107,7 +108,7 @@ public class InstagramSession {
 
         mCurrentStatus = STATUS.REQUIRING_AUTHORIZATION;
 
-        AuthenticationDialog authenticationDialog = AuthenticationDialog.newInstnace(mActivity, AUTHORIZATION_URL + "?client_id=" +  clientId + "&redirect_uri=" + clientCallback + "&response_type=code" + stringScope,
+        AuthenticationDialog authenticationDialog = AuthenticationDialog.newInstance(mActivity, AUTHORIZATION_URL + "?client_id=" +  clientId + "&redirect_uri=" + clientCallback + "&response_type=code" + stringScope,
                 clientCallback);
         authenticationDialog.addOnHttpCallback(new AuthenticationDialog.OnHttpCallback() {
             @Override
@@ -115,6 +116,17 @@ public class InstagramSession {
                 onAuth(url);
             }
         });
+
+        authenticationDialog.setCanceledOnTouchOutside(false);
+        authenticationDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                if(mListener != null){
+                    mListener.onError(new ConnectionError("Authorization failed, request was cancelled."));
+                }
+            }
+        });
+
         authenticationDialog.show();
     }
 
