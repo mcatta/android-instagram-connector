@@ -6,7 +6,7 @@ Edit your build.gradle file with:
 
 ```
 dependencies {
-    compile 'eu.marcocattaneo.androidinstagramconnector:android-instagram-connector:1.3'
+    compile 'eu.marcocattaneo.androidinstagramconnector:android-instagram-connector:1.3.2'
 }
 ```
 
@@ -42,6 +42,9 @@ instagram.addScopes(new HashSet<Scope>() {{
 }});
 ...
 ```
+### Extra:
+To logout you can invoke logout() method on the InstagramSession.
+
 ## LICENSE
 
 > Copyright 2016 Marco Cattaneo
