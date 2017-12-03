@@ -247,7 +247,7 @@ public class InstagramSession {
     public void execute(@NonNull String url, HttpMethod method, String body, final RequestCallback callback) {
 
         if (getStatus() != STATUS.CONNECTED) {
-            callback.onResponse(403, null);
+            mListener.onError(new ConnectionError("You need to connect before, status not connected"));
             return;
         }
 
