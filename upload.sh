@@ -2,4 +2,4 @@
 
 # build and upload
 ./gradlew install
-./gradlew bintrayUplaod
+./gradlew bintrayUpload

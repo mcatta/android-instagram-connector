@@ -218,6 +218,13 @@ public class InstagramSession {
         return mCurrentStatus;
     }
 
+    /**
+     * Clear saved token
+     * @return operation response
+     */
+    private boolean clearToken() {
+        return mSharedPreferences.edit().remove(PREF_SHARED_TOKEN).commit();
+    }
 
     /**
      * Execute an instagram request (standard GET)
@@ -239,6 +246,11 @@ public class InstagramSession {
      */
     public void execute(@NonNull String url, HttpMethod method, String body, final RequestCallback callback) {
 
+        if (getStatus() != STATUS.CONNECTED) {
+            callback.onResponse(403, null);
+            return;
+        }
+
         String token = url.contains("?") ? "&access_token=" : "?access_token=";
         token += getToken();
 
@@ -254,6 +266,16 @@ public class InstagramSession {
             }
         });
 
+    }
+
+    /**
+     * Logout and invalidate session
+     */
+    public void logout() {
+        boolean res = clearToken();
+        if (res) {
+            mCurrentStatus = STATUS.NOT_READY;
+        }
     }
 
 }
